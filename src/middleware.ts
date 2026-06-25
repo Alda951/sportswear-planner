@@ -1,24 +1,29 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getToken } from "next-auth/jwt";
 
-export async function middleware(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  const isLoggedIn = !!token;
+export function middleware(request: NextRequest) {
+  const sessionToken =
+    request.cookies.get("next-auth.session-token") ||
+    request.cookies.get("__Secure-next-auth.session-token");
 
-  const isAuthPage = req.nextUrl.pathname.startsWith("/login") ||
-                     req.nextUrl.pathname.startsWith("/register");
-  const isDashboard = req.nextUrl.pathname.startsWith("/dashboard") ||
-                      req.nextUrl.pathname.startsWith("/kanban") ||
-                      req.nextUrl.pathname.startsWith("/roadmap") ||
-                      req.nextUrl.pathname.startsWith("/tasks");
+  const isAuthPage =
+    request.nextUrl.pathname.startsWith("/login") ||
+    request.nextUrl.pathname.startsWith("/register");
 
-  if (isDashboard && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/login", req.url));
+  const isDashboard =
+    request.nextUrl.pathname.startsWith("/dashboard") ||
+    request.nextUrl.pathname.startsWith("/kanban") ||
+    request.nextUrl.pathname.startsWith("/roadmap") ||
+    request.nextUrl.pathname.startsWith("/tasks");
+
+  if (isDashboard && !sessionToken) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
-  if (isAuthPage && isLoggedIn) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+
+  if (isAuthPage && sessionToken) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
+
   return NextResponse.next();
 }
 

@@ -265,7 +265,7 @@ function TaskCard({
   task, users, onDragStart, onDragEnd, isDragging, onDelete, onUpdate, onOpenDetail,
 }: {
   task: Task;
-  users: User[];
+  users?: User[];
   onDragStart: () => void;
   onDragEnd: () => void;
   isDragging: boolean;

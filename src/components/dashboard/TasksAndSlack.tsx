@@ -48,12 +48,12 @@ const AVATAR_COLORS: Record<string, string> = {
 export default function TasksAndSlack({
   initialTasks,
   products,
-  users,
+  users = [],
   initialMessages,
 }: {
   initialTasks:    Task[];
   products:        { id: string; name: string; emoji: string }[];
-  users:           User[];
+  users?:          User[];
   initialMessages: SlackMessage[];
 }) {
   const [tasks,         setTasks]         = useState<Task[]>(initialTasks);

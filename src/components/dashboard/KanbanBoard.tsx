@@ -47,12 +47,12 @@ const AVATAR_COLORS: Record<string, string> = {
 export default function KanbanBoard({
   initialTasks,
   products,
-  users,
+  users = [],
   initialProduct = "all",
 }: {
   initialTasks: Task[];
   products: Product[];
-  users: User[];
+  users?: User[];
   initialProduct?: string;
 }) {
   const [tasks, setTasks]           = useState<Task[]>(initialTasks);

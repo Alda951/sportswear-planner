@@ -49,6 +49,7 @@ export async function POST(req: NextRequest) {
     const product = await prisma.product.create({
       data: {
         ...data,
+        status: data.status as any,
         targetDate: data.targetDate ? new Date(data.targetDate) : undefined,
       },
     });
